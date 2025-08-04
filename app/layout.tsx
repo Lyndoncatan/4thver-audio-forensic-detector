@@ -4,7 +4,11 @@ import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 export const metadata: Metadata = {
+<<<<<<< HEAD
   title: 'Audio Forensic Detector',
+=======
+  title: 'v0 App',
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
   description: 'Created with v0',
   generator: 'v0.dev',
 }

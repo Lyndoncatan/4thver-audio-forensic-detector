@@ -2,6 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
 import { Button } from "@/components/ui/button"
 import { Progress } from "@/components/ui/progress"
 import { Download, Database, AlertCircle, CheckCircle } from "lucide-react"
@@ -9,6 +13,12 @@ import { generatePDFReport } from "@/lib/pdf-generator"
 import { DatabaseService } from "@/lib/database"
 import { getSupabaseStatus } from "@/lib/supabase"
 import { useState, useEffect } from "react"
+<<<<<<< HEAD
+=======
+=======
+import { Progress } from "@/components/ui/progress"
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
 
 interface AudioData {
   blob: Blob
@@ -23,6 +33,10 @@ interface AudioAnalysisProps {
 }
 
 export default function AudioAnalysis({ audioData }: AudioAnalysisProps) {
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false)
   const [pdfProgress, setPdfProgress] = useState(0)
   const [pdfStage, setPdfStage] = useState("")
@@ -124,6 +138,11 @@ export default function AudioAnalysis({ audioData }: AudioAnalysisProps) {
     }
   }
 
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
   if (!audioData) {
     return (
       <div className="text-center">
@@ -150,6 +169,10 @@ export default function AudioAnalysis({ audioData }: AudioAnalysisProps) {
 
   const results = audioData.analysisResults
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -219,6 +242,15 @@ export default function AudioAnalysis({ audioData }: AudioAnalysisProps) {
           <p className="text-blue-700 text-sm">{saveStatus}</p>
         </div>
       )}
+<<<<<<< HEAD
+=======
+=======
+  // Add safety checks for all data access
+  return (
+    <div>
+      <h2 className="text-2xl font-bold text-purple-600 mb-6 text-center">Audio Analysis Results</h2>
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {/* Basic Info */}
@@ -355,6 +387,10 @@ export default function AudioAnalysis({ audioData }: AudioAnalysisProps) {
           </p>
         </CardContent>
       </Card>
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
 
       {/* Export Information */}
       <Card className="mt-6">
@@ -402,6 +438,11 @@ export default function AudioAnalysis({ audioData }: AudioAnalysisProps) {
           </div>
         </CardContent>
       </Card>
+<<<<<<< HEAD
+=======
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
+>>>>>>> e150a908479b82c1b4a3f5390a8e10fb330295b9
     </div>
   )
 }

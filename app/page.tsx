@@ -29,50 +29,73 @@ export default function AudioForensicDetector() {
   const [isPlaying, setIsPlaying] = useState(false)
   const [analysisProgress, setAnalysisProgress] = useState(0)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
+<<<<<<< HEAD
   const [recordingStatus, setRecordingStatus] = useState<string>("")
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null)
+<<<<<<< HEAD
   const streamRef = useRef<MediaStream | null>(null)
 
   const tabs = ["Record", "Upload", "Analyze", "Sonar View", "About Us", "Settings"]
+=======
+
+  const tabs = ["Record", "Upload", "Analyze", "Sonar View", "Sessions", "Settings"]
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
 
   useEffect(() => {
     return () => {
       if (recordingIntervalRef.current) {
         clearInterval(recordingIntervalRef.current)
       }
+<<<<<<< HEAD
       if (streamRef.current) {
         streamRef.current.getTracks().forEach((track) => track.stop())
       }
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
     }
   }, [])
 
   const startRecording = async () => {
     try {
+<<<<<<< HEAD
       setRecordingStatus("Requesting microphone access...")
 
       // Check if we're in a secure context (HTTPS or localhost)
       if (!window.isSecureContext) {
         setRecordingStatus("Error: HTTPS required for microphone access")
+=======
+      // Check if we're in a secure context (HTTPS or localhost)
+      if (!window.isSecureContext) {
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
         alert("Microphone access requires HTTPS or localhost. Please use a secure connection.")
         return
       }
 
       // Check if getUserMedia is supported
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+<<<<<<< HEAD
         setRecordingStatus("Error: Browser doesn't support audio recording")
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
         alert(
           "Your browser doesn't support audio recording. Please use a modern browser like Chrome, Firefox, or Safari.",
         )
         return
       }
 
+<<<<<<< HEAD
       setRecordingStatus("Accessing microphone...")
 
       // Request microphone permission with optimal constraints
+=======
+      // Request microphone permission with better constraints
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -83,6 +106,7 @@ export default function AudioForensicDetector() {
         },
       })
 
+<<<<<<< HEAD
       streamRef.current = stream
       setRecordingStatus("Microphone access granted")
 
@@ -90,6 +114,12 @@ export default function AudioForensicDetector() {
       const supportedTypes = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus", "audio/wav"]
 
       let mimeType = ""
+=======
+      // Check MediaRecorder support and find compatible MIME type
+      let mimeType = "audio/webm;codecs=opus"
+      const supportedTypes = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus", "audio/wav"]
+
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
       for (const type of supportedTypes) {
         if (MediaRecorder.isTypeSupported(type)) {
           mimeType = type
@@ -97,6 +127,7 @@ export default function AudioForensicDetector() {
         }
       }
 
+<<<<<<< HEAD
       if (!mimeType) {
         console.warn("No supported MIME type found, using default")
       }
@@ -108,6 +139,15 @@ export default function AudioForensicDetector() {
         audioBitsPerSecond: 128000,
       }
 
+=======
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        // Fallback to default
+        mimeType = ""
+      }
+
+      // Create MediaRecorder with compatible options
+      const options: MediaRecorderOptions = {}
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
       if (mimeType) {
         options.mimeType = mimeType
       }
@@ -115,6 +155,7 @@ export default function AudioForensicDetector() {
       mediaRecorderRef.current = new MediaRecorder(stream, options)
       audioChunksRef.current = []
 
+<<<<<<< HEAD
       // Set up event handlers
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
@@ -149,16 +190,36 @@ export default function AudioForensicDetector() {
         const audioUrl = URL.createObjectURL(audioBlob)
 
         // Determine file extension
+=======
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data)
+        }
+      }
+
+      mediaRecorderRef.current.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: mimeType || "audio/wav",
+        })
+        const audioUrl = URL.createObjectURL(audioBlob)
+
+        // Determine file extension based on MIME type
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
         let extension = ".wav"
         if (mimeType.includes("webm")) extension = ".webm"
         else if (mimeType.includes("mp4")) extension = ".mp4"
         else if (mimeType.includes("ogg")) extension = ".ogg"
 
+<<<<<<< HEAD
         const newAudioData: AudioData = {
+=======
+        setAudioData({
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
           blob: audioBlob,
           url: audioUrl,
           name: `Recording_${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}${extension}`,
           duration: recordingTime,
+<<<<<<< HEAD
         }
 
         setAudioData(newAudioData)
@@ -174,11 +235,20 @@ export default function AudioForensicDetector() {
         setTimeout(() => {
           analyzeRecordedAudio(newAudioData)
         }, 1000)
+=======
+        })
+
+        // Stop all tracks to release the microphone
+        stream.getTracks().forEach((track) => track.stop())
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
       }
 
       mediaRecorderRef.current.onerror = (event) => {
         console.error("MediaRecorder error:", event)
+<<<<<<< HEAD
         setRecordingStatus("Recording error occurred")
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
         alert("Recording error occurred. Please try again.")
         setIsRecording(false)
         if (recordingIntervalRef.current) {
@@ -186,6 +256,7 @@ export default function AudioForensicDetector() {
         }
       }
 
+<<<<<<< HEAD
       mediaRecorderRef.current.onstart = () => {
         setRecordingStatus("Recording in progress...")
         console.log("Recording started successfully")
@@ -197,16 +268,31 @@ export default function AudioForensicDetector() {
       setRecordingTime(0)
 
       // Start timer
+=======
+      // Start recording
+      mediaRecorderRef.current.start(1000) // Collect data every second
+      setIsRecording(true)
+      setRecordingTime(0)
+
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
       recordingIntervalRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1)
       }, 1000)
 
+<<<<<<< HEAD
       console.log("Recording started with MIME type:", mimeType)
     } catch (error: any) {
       console.error("Error accessing microphone:", error)
       setRecordingStatus(`Error: ${error.message}`)
 
       // Provide specific error messages
+=======
+      console.log("Recording started successfully with MIME type:", mimeType)
+    } catch (error: any) {
+      console.error("Error accessing microphone:", error)
+
+      // Provide specific error messages based on the error type
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
         alert("Microphone access denied. Please allow microphone permissions and try again.")
       } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
@@ -216,11 +302,19 @@ export default function AudioForensicDetector() {
           "Microphone is already in use by another application. Please close other apps using the microphone and try again.",
         )
       } else if (error.name === "OverconstrainedError" || error.name === "ConstraintNotSatisfiedError") {
+<<<<<<< HEAD
         // Retry with basic constraints
         try {
           setRecordingStatus("Retrying with basic settings...")
           const basicStream = await navigator.mediaDevices.getUserMedia({ audio: true })
           streamRef.current = basicStream
+=======
+        alert("Microphone doesn't support the requested settings. Trying with basic settings...")
+
+        // Retry with minimal constraints
+        try {
+          const basicStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
 
           mediaRecorderRef.current = new MediaRecorder(basicStream)
           audioChunksRef.current = []
@@ -231,15 +325,24 @@ export default function AudioForensicDetector() {
             }
           }
 
+<<<<<<< HEAD
           mediaRecorderRef.current.onstop = async () => {
             const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" })
             const audioUrl = URL.createObjectURL(audioBlob)
 
             const newAudioData: AudioData = {
+=======
+          mediaRecorderRef.current.onstop = () => {
+            const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" })
+            const audioUrl = URL.createObjectURL(audioBlob)
+
+            setAudioData({
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
               blob: audioBlob,
               url: audioUrl,
               name: `Recording_${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.wav`,
               duration: recordingTime,
+<<<<<<< HEAD
             }
 
             setAudioData(newAudioData)
@@ -251,6 +354,11 @@ export default function AudioForensicDetector() {
             setTimeout(() => {
               analyzeRecordedAudio(newAudioData)
             }, 1000)
+=======
+            })
+
+            basicStream.getTracks().forEach((track) => track.stop())
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
           }
 
           mediaRecorderRef.current.start(1000)
@@ -261,10 +369,16 @@ export default function AudioForensicDetector() {
             setRecordingTime((prev) => prev + 1)
           }, 1000)
 
+<<<<<<< HEAD
           setRecordingStatus("Recording with basic settings...")
         } catch (retryError) {
           console.error("Retry failed:", retryError)
           setRecordingStatus("Unable to access microphone")
+=======
+          console.log("Recording started with basic settings")
+        } catch (retryError) {
+          console.error("Retry failed:", retryError)
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
           alert("Unable to access microphone. Please check your browser settings and permissions.")
         }
       } else {
@@ -277,7 +391,10 @@ export default function AudioForensicDetector() {
 
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
+<<<<<<< HEAD
       setRecordingStatus("Stopping recording...")
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
       mediaRecorderRef.current.stop()
       setIsRecording(false)
 
@@ -291,11 +408,16 @@ export default function AudioForensicDetector() {
     const file = event.target.files?.[0]
     if (file) {
       const audioUrl = URL.createObjectURL(file)
+<<<<<<< HEAD
       const newAudioData: AudioData = {
+=======
+      setAudioData({
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
         blob: file,
         url: audioUrl,
         name: file.name,
         duration: 0, // Will be updated when audio loads
+<<<<<<< HEAD
       }
       setAudioData(newAudioData)
 
@@ -308,17 +430,41 @@ export default function AudioForensicDetector() {
 
   const analyzeRecordedAudio = useCallback(async (audioToAnalyze: AudioData) => {
     if (!audioToAnalyze) return
+=======
+      })
+    }
+  }
+
+  const playAudio = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause()
+      } else {
+        audioRef.current.play()
+      }
+      setIsPlaying(!isPlaying)
+    }
+  }
+
+  const analyzeAudio = useCallback(async () => {
+    if (!audioData) return
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
 
     setIsAnalyzing(true)
     setAnalysisProgress(0)
 
+<<<<<<< HEAD
     // Simulate realistic analysis progress
+=======
+    // Simulate analysis progress
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
     const progressInterval = setInterval(() => {
       setAnalysisProgress((prev) => {
         if (prev >= 100) {
           clearInterval(progressInterval)
           return 100
         }
+<<<<<<< HEAD
         return prev + 8
       })
     }, 400)
@@ -385,22 +531,66 @@ export default function AudioForensicDetector() {
             return { ...prevData, analysisResults }
           }
           return prevData
+=======
+        return prev + 10
+      })
+    }, 500)
+
+    try {
+      // Simulate the analysis results without recursive calls
+      setTimeout(() => {
+        const mockResults = {
+          duration: audioData.duration || 0,
+          sampleRate: 44100,
+          averageRMS: 0.0234,
+          detectedSounds: 5,
+          dominantFrequency: 440,
+          maxDecibels: -12.5,
+          soundEvents: [
+            { time: 0.5, frequency: 440, amplitude: 0.8, type: "Voice" },
+            { time: 1.2, frequency: 880, amplitude: 0.6, type: "Background" },
+            { time: 2.1, frequency: 220, amplitude: 0.4, type: "Ambient" },
+            { time: 3.0, frequency: 1760, amplitude: 0.7, type: "Noise" },
+            { time: 4.2, frequency: 330, amplitude: 0.5, type: "Echo" },
+          ],
+          frequencySpectrum: Array.from({ length: 100 }, (_, i) => ({
+            frequency: i * 220,
+            magnitude: Math.random() * 0.8 + 0.1,
+          })),
+        }
+
+        // Update audioData with analysis results without causing recursion
+        setAudioData((currentData) => {
+          if (currentData) {
+            return { ...currentData, analysisResults: mockResults }
+          }
+          return currentData
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
         })
 
         setIsAnalyzing(false)
         clearInterval(progressInterval)
         setAnalysisProgress(100)
+<<<<<<< HEAD
 
         // Auto-switch to Analyze tab to show results
         setActiveTab("Analyze")
       }, 3000)
+=======
+      }, 5000)
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
     } catch (error) {
       console.error("Analysis error:", error)
       setIsAnalyzing(false)
       clearInterval(progressInterval)
+<<<<<<< HEAD
       alert("Analysis failed. Please try again.")
     }
   }, [])
+=======
+    }
+  }, [audioData])
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -479,6 +669,7 @@ export default function AudioForensicDetector() {
                 return null
               })()}
 
+<<<<<<< HEAD
               {/* Recording Status */}
               {recordingStatus && (
                 <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg max-w-2xl mx-auto">
@@ -486,6 +677,8 @@ export default function AudioForensicDetector() {
                 </div>
               )}
 
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
               <div className="space-y-6">
                 <Button
                   onClick={isRecording ? stopRecording : startRecording}
@@ -508,9 +701,12 @@ export default function AudioForensicDetector() {
                         <span className="text-red-700 font-medium">Recording in progress...</span>
                       </div>
                       <div className="text-2xl font-mono text-center">{formatTime(recordingTime)}</div>
+<<<<<<< HEAD
                       <div className="mt-2 text-sm text-gray-600 text-center">
                         Audio will be automatically analyzed when recording stops
                       </div>
+=======
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
                     </CardContent>
                   </Card>
                 )}
@@ -528,9 +724,13 @@ export default function AudioForensicDetector() {
                           src={audioData.url}
                           onLoadedMetadata={(e) => {
                             const audio = e.target as HTMLAudioElement
+<<<<<<< HEAD
                             if (audioData.duration === 0) {
                               setAudioData((prev) => (prev ? { ...prev, duration: Math.floor(audio.duration) } : null))
                             }
+=======
+                            setAudioData((prev) => (prev ? { ...prev, duration: Math.floor(audio.duration) } : null))
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
                           }}
                           onPlay={() => setIsPlaying(true)}
                           onPause={() => setIsPlaying(false)}
@@ -538,6 +738,7 @@ export default function AudioForensicDetector() {
                           controls
                           className="w-full"
                         />
+<<<<<<< HEAD
 
                         {isAnalyzing && (
                           <div className="space-y-2">
@@ -555,6 +756,11 @@ export default function AudioForensicDetector() {
                             </p>
                           </div>
                         )}
+=======
+                        <Button onClick={analyzeAudio} className="w-full">
+                          Analyze Audio
+                        </Button>
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
                       </div>
                     </CardContent>
                   </Card>
@@ -595,6 +801,7 @@ export default function AudioForensicDetector() {
                             setAudioData((prev) => (prev ? { ...prev, duration: Math.floor(audio.duration) } : null))
                           }}
                         />
+<<<<<<< HEAD
 
                         {isAnalyzing && (
                           <div className="space-y-2">
@@ -610,6 +817,15 @@ export default function AudioForensicDetector() {
                               Found {audioData.analysisResults.detectedSounds} sound events. Check the Analyze and Sonar
                               View tabs.
                             </p>
+=======
+                        <Button onClick={analyzeAudio} className="w-full" disabled={isAnalyzing}>
+                          {isAnalyzing ? "Analyzing..." : "Analyze Audio"}
+                        </Button>
+                        {isAnalyzing && (
+                          <div className="space-y-2">
+                            <Progress value={analysisProgress} className="w-full" />
+                            <p className="text-sm text-gray-600 text-center">{analysisProgress}% Complete</p>
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
                           </div>
                         )}
                       </div>
@@ -622,6 +838,7 @@ export default function AudioForensicDetector() {
 
           {activeTab === "Analyze" && <AudioAnalysis audioData={audioData} />}
 
+<<<<<<< HEAD
           {activeTab === "Sonar View" && (
             <>
               <SonarView audioData={audioData} />
@@ -800,6 +1017,24 @@ export default function AudioForensicDetector() {
                   </div>
                 </CardContent>
               </Card>
+=======
+          {activeTab === "Sonar View" && <SonarView audioData={audioData} />}
+
+          {/* Add Live Visualization below Sonar View */}
+          {activeTab === "Sonar View" && audioData && (
+            <div className="mt-8">
+              <LiveVisualization audioData={audioData} />
+            </div>
+          )}
+
+          {activeTab === "Sessions" && (
+            <div className="text-center">
+              <h2 className="text-2xl font-bold text-purple-600 mb-4">Analysis Sessions</h2>
+              <p className="text-gray-600 mb-8">Manage and review previous forensic analysis sessions</p>
+              <div className="bg-gray-100 rounded-lg p-8">
+                <p className="text-gray-500">No previous sessions found</p>
+              </div>
+>>>>>>> 4c304cd8d7064ac4dcfb8ef37328bd47af89ad1a
             </div>
           )}
 

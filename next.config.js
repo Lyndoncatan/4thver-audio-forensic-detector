@@ -9,15 +9,23 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
+<<<<<<< HEAD
   // Remove output: "standalone" for Render deployment
+=======
+  output: "standalone",
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
   images: {
     domains: [],
     unoptimized: true,
   },
+<<<<<<< HEAD
   // Optimize for production
   swcMinify: true,
   webpack: (config, { isServer }) => {
     // Handle audio files
+=======
+  webpack: (config, { isServer }) => {
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     config.module.rules.push({
       test: /\.(mp3|wav|ogg|m4a)$/,
       use: {
@@ -29,7 +37,10 @@ const nextConfig = {
       },
     })
 
+<<<<<<< HEAD
     // Handle Python files (for scripts)
+=======
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     config.module.rules.push({
       test: /\.py$/,
       use: "raw-loader",

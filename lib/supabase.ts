@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { createClient } from "@supabase/supabase-js"
 
 // Get environment variables
@@ -6,6 +7,12 @@ const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
 // Create Supabase client
 export const supabase = supabaseUrl && supabaseKey ? createClient(supabaseUrl, supabaseKey) : null
+=======
+import { createClient } from "@/utils/supabase/client"
+
+// Use the proper client-side Supabase client
+export const supabase = createClient()
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
 // Database types
 export interface AudioAnalysisRecord {
@@ -35,11 +42,20 @@ export interface AnalysisSession {
 
 // Helper function to check if Supabase is available
 export const isSupabaseAvailable = (): boolean => {
+<<<<<<< HEAD
   return !!(supabaseUrl && supabaseKey && supabase)
+=======
+  try {
+    return !!supabase && !!process.env.NEXT_PUBLIC_SUPABASE_URL
+  } catch {
+    return false
+  }
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 }
 
 // Helper function to get connection status
 export const getSupabaseStatus = (): { connected: boolean; url?: string; error?: string } => {
+<<<<<<< HEAD
   if (!supabaseUrl) {
     return {
       connected: false,
@@ -65,4 +81,24 @@ export const getSupabaseStatus = (): { connected: boolean; url?: string; error?:
     connected: true,
     url: supabaseUrl,
   }
+=======
+  try {
+    if (!supabase || !process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      return {
+        connected: false,
+        error: "Supabase client not initialized",
+      }
+    }
+
+    return {
+      connected: true,
+      url: process.env.NEXT_PUBLIC_SUPABASE_URL,
+    }
+  } catch (error) {
+    return {
+      connected: false,
+      error: "Configuration error",
+    }
+  }
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 }

@@ -3,6 +3,7 @@ import { supabase, isSupabaseAvailable, type AudioAnalysisRecord, type AnalysisS
 export class DatabaseService {
   // Check if database is available
   private static checkAvailability(): boolean {
+<<<<<<< HEAD
     return isSupabaseAvailable()
   }
 
@@ -93,11 +94,19 @@ export class DatabaseService {
         message: `Table creation failed: ${error.message}`,
       }
     }
+=======
+    if (!isSupabaseAvailable()) {
+      console.warn("Database service not available - Supabase not initialized")
+      return false
+    }
+    return true
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
   }
 
   // Save analysis results to database
   static async saveAnalysis(audioData: any): Promise<string | null> {
     if (!this.checkAvailability()) {
+<<<<<<< HEAD
       console.log("Supabase not available - running in local mode")
       return new Promise((resolve) => {
         setTimeout(() => {
@@ -105,11 +114,15 @@ export class DatabaseService {
           resolve("demo-id-" + Date.now())
         }, 1000)
       })
+=======
+      throw new Error("Database service not available. Please check your Supabase configuration.")
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     }
 
     try {
       const analysisRecord: AudioAnalysisRecord = {
         filename: audioData.name,
+<<<<<<< HEAD
         duration: audioData.analysisResults.duration,
         sample_rate: audioData.analysisResults.sampleRate,
         average_rms: audioData.analysisResults.averageRMS,
@@ -134,6 +147,31 @@ export class DatabaseService {
       console.log("✅ Analysis saved to Supabase:", data[0].id)
       return data[0].id
     } catch (error: any) {
+=======
+        duration: audioData.duration,
+        sample_rate: audioData.analysisResults?.sampleRate || 44100,
+        average_rms: audioData.analysisResults?.averageRMS || 0,
+        detected_sounds: audioData.analysisResults?.detectedSounds || 0,
+        dominant_frequency: audioData.analysisResults?.dominantFrequency || 0,
+        max_decibels: audioData.analysisResults?.maxDecibels || 0,
+        sound_events: audioData.analysisResults?.soundEvents || [],
+        frequency_spectrum: audioData.analysisResults?.frequencySpectrum || [],
+        analysis_results: audioData.analysisResults || {},
+      }
+
+      console.log("Attempting to save analysis to database...")
+
+      const { data, error } = await supabase.from("audio_analyses").insert([analysisRecord]).select().single()
+
+      if (error) {
+        console.error("Supabase error saving analysis:", error)
+        throw new Error(`Database error: ${error.message}`)
+      }
+
+      console.log("✅ Analysis saved successfully:", data.id)
+      return data.id
+    } catch (error) {
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       console.error("Database save error:", error)
       throw error
     }
@@ -142,18 +180,30 @@ export class DatabaseService {
   // Get all analyses
   static async getAllAnalyses(): Promise<AudioAnalysisRecord[]> {
     if (!this.checkAvailability()) {
+<<<<<<< HEAD
       console.log("Supabase not available - returning empty array")
+=======
+      console.warn("Database not available, returning empty array")
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       return []
     }
 
     try {
+<<<<<<< HEAD
       const { data, error } = await supabase!
+=======
+      const { data, error } = await supabase
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         .from("audio_analyses")
         .select("*")
         .order("created_at", { ascending: false })
 
       if (error) {
+<<<<<<< HEAD
         console.error("Supabase fetch error:", error)
+=======
+        console.error("Error fetching analyses:", error)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         return []
       }
 
@@ -167,6 +217,7 @@ export class DatabaseService {
   // Delete analysis
   static async deleteAnalysis(id: string): Promise<boolean> {
     if (!this.checkAvailability()) {
+<<<<<<< HEAD
       console.log("Supabase not available - simulating delete")
       return true
     }
@@ -176,6 +227,16 @@ export class DatabaseService {
 
       if (error) {
         console.error("Supabase delete error:", error)
+=======
+      throw new Error("Database service not available")
+    }
+
+    try {
+      const { error } = await supabase.from("audio_analyses").delete().eq("id", id)
+
+      if (error) {
+        console.error("Error deleting analysis:", error)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         return false
       }
 
@@ -189,16 +250,25 @@ export class DatabaseService {
   // Save analysis session
   static async saveSession(sessionName: string, audioData: any): Promise<string | null> {
     if (!this.checkAvailability()) {
+<<<<<<< HEAD
       console.log("Supabase not available - simulating session save")
       return "demo-session-" + Date.now()
     }
 
     try {
       const sessionRecord: AnalysisSession = {
+=======
+      throw new Error("Database service not available")
+    }
+
+    try {
+      const session: AnalysisSession = {
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         session_name: sessionName,
         audio_file_url: audioData.url,
         analysis_data: {
           filename: audioData.name,
+<<<<<<< HEAD
           duration: audioData.analysisResults.duration,
           sample_rate: audioData.analysisResults.sampleRate,
           average_rms: audioData.analysisResults.averageRMS,
@@ -219,6 +289,28 @@ export class DatabaseService {
       }
 
       return data[0].id
+=======
+          duration: audioData.duration,
+          sample_rate: audioData.analysisResults?.sampleRate || 44100,
+          average_rms: audioData.analysisResults?.averageRMS || 0,
+          detected_sounds: audioData.analysisResults?.detectedSounds || 0,
+          dominant_frequency: audioData.analysisResults?.dominantFrequency || 0,
+          max_decibels: audioData.analysisResults?.maxDecibels || 0,
+          sound_events: audioData.analysisResults?.soundEvents || [],
+          frequency_spectrum: audioData.analysisResults?.frequencySpectrum || [],
+          analysis_results: audioData.analysisResults || {},
+        },
+      }
+
+      const { data, error } = await supabase.from("analysis_sessions").insert([session]).select().single()
+
+      if (error) {
+        console.error("Error saving session:", error)
+        return null
+      }
+
+      return data.id
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     } catch (error) {
       console.error("Database session save error:", error)
       return null
@@ -228,18 +320,29 @@ export class DatabaseService {
   // Get all sessions
   static async getAllSessions(): Promise<AnalysisSession[]> {
     if (!this.checkAvailability()) {
+<<<<<<< HEAD
       console.log("Supabase not available - returning empty sessions")
+=======
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       return []
     }
 
     try {
+<<<<<<< HEAD
       const { data, error } = await supabase!
+=======
+      const { data, error } = await supabase
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         .from("analysis_sessions")
         .select("*")
         .order("created_at", { ascending: false })
 
       if (error) {
+<<<<<<< HEAD
         console.error("Supabase sessions fetch error:", error)
+=======
+        console.error("Error fetching sessions:", error)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         return []
       }
 
@@ -249,4 +352,39 @@ export class DatabaseService {
       return []
     }
   }
+<<<<<<< HEAD
+=======
+
+  // Test database connection
+  static async testConnection(): Promise<{ success: boolean; message: string }> {
+    if (!this.checkAvailability()) {
+      return {
+        success: false,
+        message: "Supabase client not initialized",
+      }
+    }
+
+    try {
+      // Try to fetch from a table (this will test the connection)
+      const { data, error } = await supabase.from("audio_analyses").select("count").limit(1)
+
+      if (error) {
+        return {
+          success: false,
+          message: `Database connection failed: ${error.message}`,
+        }
+      }
+
+      return {
+        success: true,
+        message: "Database connection successful",
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: `Connection test failed: ${error}`,
+      }
+    }
+  }
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 }

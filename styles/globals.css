@@ -10,8 +10,11 @@
 
 @layer base {
   :root {
+<<<<<<< HEAD
     --font-sans: var(--font-geist-sans);
     --font-mono: var(--font-geist-mono);
+=======
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
     --card: 0 0% 100%;

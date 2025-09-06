@@ -2,13 +2,21 @@
 
 import type React from "react"
 
+<<<<<<< HEAD
 import { useState, useRef, useEffect } from "react"
+=======
+import { useState, useRef, useEffect, useCallback } from "react"
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 import { Mic, Upload } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
+<<<<<<< HEAD
 import EnhancedAudioAnalysis from "./components/enhanced-audio-analysis"
+=======
+import AudioAnalysis from "./components/audio-analysis"
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 import SonarView from "./components/sonar-view"
 import AudioSettings from "./components/audio-settings"
 import LiveVisualization from "./components/live-visualization"
@@ -36,9 +44,14 @@ export default function AudioForensicDetector() {
   const audioRef = useRef<HTMLAudioElement | null>(null)
   const recordingIntervalRef = useRef<NodeJS.Timeout | null>(null)
   const streamRef = useRef<MediaStream | null>(null)
+<<<<<<< HEAD
   const analysisInProgressRef = useRef<boolean>(false)
 
   const tabs = ["Record", "Upload", "Analysis", "Sonar View", "About Us", "Settings"]
+=======
+
+  const tabs = ["Record", "Upload", "Analyze", "Sonar View", "About Us", "Settings"]
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
   useEffect(() => {
     return () => {
@@ -51,6 +64,7 @@ export default function AudioForensicDetector() {
     }
   }, [])
 
+<<<<<<< HEAD
   // Helper function to generate fallback analysis
   const createFallbackAnalysis = (audioToAnalyze: AudioData) => {
     const duration = audioToAnalyze.duration || 5
@@ -225,16 +239,26 @@ export default function AudioForensicDetector() {
     }
   }
 
+=======
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
   const startRecording = async () => {
     try {
       setRecordingStatus("Requesting microphone access...")
 
+<<<<<<< HEAD
+=======
+      // Check if we're in a secure context (HTTPS or localhost)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       if (!window.isSecureContext) {
         setRecordingStatus("Error: HTTPS required for microphone access")
         alert("Microphone access requires HTTPS or localhost. Please use a secure connection.")
         return
       }
 
+<<<<<<< HEAD
+=======
+      // Check if getUserMedia is supported
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
         setRecordingStatus("Error: Browser doesn't support audio recording")
         alert(
@@ -245,6 +269,10 @@ export default function AudioForensicDetector() {
 
       setRecordingStatus("Accessing microphone...")
 
+<<<<<<< HEAD
+=======
+      // Request microphone permission with optimal constraints
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       const stream = await navigator.mediaDevices.getUserMedia({
         audio: {
           echoCancellation: true,
@@ -258,7 +286,13 @@ export default function AudioForensicDetector() {
       streamRef.current = stream
       setRecordingStatus("Microphone access granted")
 
+<<<<<<< HEAD
       const supportedTypes = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus", "audio/wav"]
+=======
+      // Find the best supported MIME type
+      const supportedTypes = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4", "audio/ogg;codecs=opus", "audio/wav"]
+
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       let mimeType = ""
       for (const type of supportedTypes) {
         if (MediaRecorder.isTypeSupported(type)) {
@@ -267,22 +301,51 @@ export default function AudioForensicDetector() {
         }
       }
 
+<<<<<<< HEAD
       setRecordingStatus("Initializing recorder...")
 
       const options: MediaRecorderOptions = { audioBitsPerSecond: 128000 }
       if (mimeType) options.mimeType = mimeType
+=======
+      if (!mimeType) {
+        console.warn("No supported MIME type found, using default")
+      }
+
+      setRecordingStatus("Initializing recorder...")
+
+      // Create MediaRecorder with optimal settings
+      const options: MediaRecorderOptions = {
+        audioBitsPerSecond: 128000,
+      }
+
+      if (mimeType) {
+        options.mimeType = mimeType
+      }
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
       mediaRecorderRef.current = new MediaRecorder(stream, options)
       audioChunksRef.current = []
 
+<<<<<<< HEAD
       mediaRecorderRef.current.ondataavailable = (event) => {
         if (event.data.size > 0) {
           audioChunksRef.current.push(event.data)
+=======
+      // Set up event handlers
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data)
+          console.log(`Audio chunk received: ${event.data.size} bytes`)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         }
       }
 
       mediaRecorderRef.current.onstop = async () => {
         setRecordingStatus("Processing recording...")
+<<<<<<< HEAD
+=======
+        console.log(`Total chunks collected: ${audioChunksRef.current.length}`)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
         if (audioChunksRef.current.length === 0) {
           setRecordingStatus("Error: No audio data recorded")
@@ -290,7 +353,16 @@ export default function AudioForensicDetector() {
           return
         }
 
+<<<<<<< HEAD
         const audioBlob = new Blob(audioChunksRef.current, { type: mimeType || "audio/wav" })
+=======
+        // Create audio blob
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: mimeType || "audio/wav",
+        })
+
+        console.log(`Audio blob created: ${audioBlob.size} bytes, type: ${audioBlob.type}`)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
         if (audioBlob.size === 0) {
           setRecordingStatus("Error: Empty recording")
@@ -299,6 +371,11 @@ export default function AudioForensicDetector() {
         }
 
         const audioUrl = URL.createObjectURL(audioBlob)
+<<<<<<< HEAD
+=======
+
+        // Determine file extension
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         let extension = ".wav"
         if (mimeType.includes("webm")) extension = ".webm"
         else if (mimeType.includes("mp4")) extension = ".mp4"
@@ -314,20 +391,35 @@ export default function AudioForensicDetector() {
         setAudioData(newAudioData)
         setRecordingStatus("Recording saved successfully!")
 
+<<<<<<< HEAD
+=======
+        // Stop all tracks to release the microphone
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         if (streamRef.current) {
           streamRef.current.getTracks().forEach((track) => track.stop())
           streamRef.current = null
         }
 
+<<<<<<< HEAD
         // Trigger analysis after delay
         setTimeout(() => {
           runAudioAnalysis(newAudioData)
         }, 1500)
+=======
+        // Auto-analyze the recorded audio
+        setTimeout(() => {
+          analyzeRecordedAudio(newAudioData)
+        }, 1000)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       }
 
       mediaRecorderRef.current.onerror = (event) => {
         console.error("MediaRecorder error:", event)
         setRecordingStatus("Recording error occurred")
+<<<<<<< HEAD
+=======
+        alert("Recording error occurred. Please try again.")
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         setIsRecording(false)
         if (recordingIntervalRef.current) {
           clearInterval(recordingIntervalRef.current)
@@ -336,23 +428,102 @@ export default function AudioForensicDetector() {
 
       mediaRecorderRef.current.onstart = () => {
         setRecordingStatus("Recording in progress...")
+<<<<<<< HEAD
       }
 
+=======
+        console.log("Recording started successfully")
+      }
+
+      // Start recording with data collection every 1000ms
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       mediaRecorderRef.current.start(1000)
       setIsRecording(true)
       setRecordingTime(0)
 
+<<<<<<< HEAD
       recordingIntervalRef.current = setInterval(() => {
         setRecordingTime((prev) => prev + 1)
       }, 1000)
+=======
+      // Start timer
+      recordingIntervalRef.current = setInterval(() => {
+        setRecordingTime((prev) => prev + 1)
+      }, 1000)
+
+      console.log("Recording started with MIME type:", mimeType)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     } catch (error: any) {
       console.error("Error accessing microphone:", error)
       setRecordingStatus(`Error: ${error.message}`)
 
+<<<<<<< HEAD
+=======
+      // Provide specific error messages
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       if (error.name === "NotAllowedError" || error.name === "PermissionDeniedError") {
         alert("Microphone access denied. Please allow microphone permissions and try again.")
       } else if (error.name === "NotFoundError" || error.name === "DevicesNotFoundError") {
         alert("No microphone found. Please connect a microphone and try again.")
+<<<<<<< HEAD
+=======
+      } else if (error.name === "NotReadableError" || error.name === "TrackStartError") {
+        alert(
+          "Microphone is already in use by another application. Please close other apps using the microphone and try again.",
+        )
+      } else if (error.name === "OverconstrainedError" || error.name === "ConstraintNotSatisfiedError") {
+        // Retry with basic constraints
+        try {
+          setRecordingStatus("Retrying with basic settings...")
+          const basicStream = await navigator.mediaDevices.getUserMedia({ audio: true })
+          streamRef.current = basicStream
+
+          mediaRecorderRef.current = new MediaRecorder(basicStream)
+          audioChunksRef.current = []
+
+          mediaRecorderRef.current.ondataavailable = (event) => {
+            if (event.data.size > 0) {
+              audioChunksRef.current.push(event.data)
+            }
+          }
+
+          mediaRecorderRef.current.onstop = async () => {
+            const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" })
+            const audioUrl = URL.createObjectURL(audioBlob)
+
+            const newAudioData: AudioData = {
+              blob: audioBlob,
+              url: audioUrl,
+              name: `Recording_${new Date().toISOString().slice(0, 19).replace(/:/g, "-")}.wav`,
+              duration: recordingTime,
+            }
+
+            setAudioData(newAudioData)
+            setRecordingStatus("Recording saved with basic settings")
+
+            basicStream.getTracks().forEach((track) => track.stop())
+
+            // Auto-analyze
+            setTimeout(() => {
+              analyzeRecordedAudio(newAudioData)
+            }, 1000)
+          }
+
+          mediaRecorderRef.current.start(1000)
+          setIsRecording(true)
+          setRecordingTime(0)
+
+          recordingIntervalRef.current = setInterval(() => {
+            setRecordingTime((prev) => prev + 1)
+          }, 1000)
+
+          setRecordingStatus("Recording with basic settings...")
+        } catch (retryError) {
+          console.error("Retry failed:", retryError)
+          setRecordingStatus("Unable to access microphone")
+          alert("Unable to access microphone. Please check your browser settings and permissions.")
+        }
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       } else {
         alert(
           `Microphone error: ${error.message || "Unknown error occurred"}. Please check your browser settings and try again.`,
@@ -381,6 +552,7 @@ export default function AudioForensicDetector() {
         blob: file,
         url: audioUrl,
         name: file.name,
+<<<<<<< HEAD
         duration: 0,
       }
       setAudioData(newAudioData)
@@ -392,6 +564,115 @@ export default function AudioForensicDetector() {
     }
   }
 
+=======
+        duration: 0, // Will be updated when audio loads
+      }
+      setAudioData(newAudioData)
+
+      // Auto-analyze uploaded file
+      setTimeout(() => {
+        analyzeRecordedAudio(newAudioData)
+      }, 1000)
+    }
+  }
+
+  const analyzeRecordedAudio = useCallback(async (audioToAnalyze: AudioData) => {
+    if (!audioToAnalyze) return
+
+    setIsAnalyzing(true)
+    setAnalysisProgress(0)
+
+    // Simulate realistic analysis progress
+    const progressInterval = setInterval(() => {
+      setAnalysisProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(progressInterval)
+          return 100
+        }
+        return prev + 8
+      })
+    }, 400)
+
+    try {
+      // Create more realistic analysis results based on audio duration
+      const duration = audioToAnalyze.duration || 5
+      const numEvents = Math.max(3, Math.floor(duration * 1.5)) // More events for longer audio
+
+      // Generate realistic sound events
+      const soundTypes = [
+        "Voice",
+        "Background",
+        "Ambient",
+        "Noise",
+        "Echo",
+        "Music",
+        "Percussion",
+        "Wind",
+        "Electronic",
+      ]
+      const soundEvents = []
+
+      for (let i = 0; i < numEvents; i++) {
+        const time = (i / (numEvents - 1)) * duration
+        const baseFreq = 200 + Math.random() * 2000
+        const amplitude = 0.3 + Math.random() * 0.7
+
+        soundEvents.push({
+          time: Number.parseFloat(time.toFixed(2)),
+          frequency: Number.parseFloat(baseFreq.toFixed(1)),
+          amplitude: Number.parseFloat(amplitude.toFixed(3)),
+          type: soundTypes[Math.floor(Math.random() * soundTypes.length)],
+          decibels: Number.parseFloat((20 * Math.log10(amplitude)).toFixed(1)),
+        })
+      }
+
+      // Sort by amplitude (loudest first)
+      soundEvents.sort((a, b) => b.amplitude - a.amplitude)
+
+      // Generate frequency spectrum
+      const frequencySpectrum = Array.from({ length: 100 }, (_, i) => ({
+        frequency: i * 220,
+        magnitude: Math.random() * 0.8 + 0.1,
+      }))
+
+      const analysisResults = {
+        duration: duration,
+        sampleRate: 44100,
+        averageRMS: 0.0234 + Math.random() * 0.02,
+        detectedSounds: numEvents,
+        dominantFrequency: soundEvents[0]?.frequency || 440,
+        maxDecibels: Math.max(...soundEvents.map((e) => e.decibels)),
+        soundEvents: soundEvents,
+        frequencySpectrum: frequencySpectrum,
+        analysisComplete: true,
+        timestamp: new Date().toISOString(),
+      }
+
+      // Wait for analysis to complete
+      setTimeout(() => {
+        setAudioData((prevData) => {
+          if (prevData && prevData.url === audioToAnalyze.url) {
+            return { ...prevData, analysisResults }
+          }
+          return prevData
+        })
+
+        setIsAnalyzing(false)
+        clearInterval(progressInterval)
+        setAnalysisProgress(100)
+
+        // Auto-switch to Analyze tab to show results
+        setActiveTab("Analyze")
+      }, 3000)
+    } catch (error) {
+      console.error("Analysis error:", error)
+      setIsAnalyzing(false)
+      clearInterval(progressInterval)
+      alert("Analysis failed. Please try again.")
+    }
+  }, [])
+
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
     const secs = seconds % 60
@@ -416,6 +697,7 @@ export default function AudioForensicDetector() {
       {/* Header */}
       <div className="text-center py-8 px-4">
         <h1 className="text-4xl font-bold text-purple-600 mb-2">Audio Forensic Detector</h1>
+<<<<<<< HEAD
         <p className="text-purple-500 text-lg mb-4">Advanced Audio Analysis & Classification System</p>
         <div className="flex justify-center space-x-2">
           <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
@@ -425,6 +707,12 @@ export default function AudioForensicDetector() {
             Enhanced Classification
           </Badge>
         </div>
+=======
+        <p className="text-purple-500 text-lg mb-4">Advanced Audio Analysis & Instrument Detection System</p>
+        <Badge variant="secondary" className="bg-orange-100 text-orange-800 border-orange-200">
+          Local Mode
+        </Badge>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       </div>
 
       {/* Navigation Tabs */}
@@ -453,7 +741,11 @@ export default function AudioForensicDetector() {
             <div className="text-center">
               <h2 className="text-2xl font-bold text-purple-600 mb-4">Audio Recording</h2>
               <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
+<<<<<<< HEAD
                 Record live audio for advanced forensic analysis with intelligent sound classification
+=======
+                Record live audio for forensic analysis with instrument detection - data flows to all tabs
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
               </p>
 
               {/* Browser Compatibility Check */}
@@ -537,9 +829,13 @@ export default function AudioForensicDetector() {
                         {isAnalyzing && (
                           <div className="space-y-2">
                             <Progress value={analysisProgress} className="w-full" />
+<<<<<<< HEAD
                             <p className="text-sm text-gray-600 text-center">
                               Advanced analysis in progress... {analysisProgress}%
                             </p>
+=======
+                            <p className="text-sm text-gray-600 text-center">Analyzing audio... {analysisProgress}%</p>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                           </div>
                         )}
 
@@ -547,8 +843,13 @@ export default function AudioForensicDetector() {
                           <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                             <p className="text-green-700 text-sm font-medium">✅ Analysis Complete!</p>
                             <p className="text-green-600 text-xs mt-1">
+<<<<<<< HEAD
                               Found {audioData.analysisResults.detectedSounds} sound events with advanced
                               classification. Check the Analysis and Sonar View tabs.
+=======
+                              Found {audioData.analysisResults.detectedSounds} sound events. Check the Analyze and Sonar
+                              View tabs.
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                             </p>
                           </div>
                         )}
@@ -563,7 +864,11 @@ export default function AudioForensicDetector() {
           {activeTab === "Upload" && (
             <div className="text-center">
               <h2 className="text-2xl font-bold text-purple-600 mb-4">Upload Audio File</h2>
+<<<<<<< HEAD
               <p className="text-gray-600 mb-8">Upload audio files for advanced forensic analysis and classification</p>
+=======
+              <p className="text-gray-600 mb-8">Upload audio files for forensic analysis and instrument detection</p>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
               <div className="max-w-2xl mx-auto">
                 <label className="block">
@@ -596,9 +901,13 @@ export default function AudioForensicDetector() {
                         {isAnalyzing && (
                           <div className="space-y-2">
                             <Progress value={analysisProgress} className="w-full" />
+<<<<<<< HEAD
                             <p className="text-sm text-gray-600 text-center">
                               Advanced analysis in progress... {analysisProgress}%
                             </p>
+=======
+                            <p className="text-sm text-gray-600 text-center">Analyzing audio... {analysisProgress}%</p>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                           </div>
                         )}
 
@@ -606,8 +915,13 @@ export default function AudioForensicDetector() {
                           <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
                             <p className="text-green-700 text-sm font-medium">✅ Analysis Complete!</p>
                             <p className="text-green-600 text-xs mt-1">
+<<<<<<< HEAD
                               Found {audioData.analysisResults.detectedSounds} sound events with advanced classification
                               ready in the Analysis tab.
+=======
+                              Found {audioData.analysisResults.detectedSounds} sound events. Check the Analyze and Sonar
+                              View tabs.
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                             </p>
                           </div>
                         )}
@@ -619,7 +933,11 @@ export default function AudioForensicDetector() {
             </div>
           )}
 
+<<<<<<< HEAD
           {activeTab === "Analysis" && <EnhancedAudioAnalysis audioData={audioData} />}
+=======
+          {activeTab === "Analyze" && <AudioAnalysis audioData={audioData} />}
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
           {activeTab === "Sonar View" && (
             <>
@@ -646,9 +964,14 @@ export default function AudioForensicDetector() {
                   <div className="space-y-4 text-gray-700">
                     <p className="text-lg leading-relaxed">
                       The <strong>Audio Forensic Detector</strong> is an advanced web-based application designed to
+<<<<<<< HEAD
                       provide comprehensive audio analysis and forensic investigation capabilities with enhanced
                       classification technology. This tool empowers users to analyze audio recordings with
                       professional-grade precision and intelligent sound identification accuracy.
+=======
+                      provide comprehensive audio analysis and forensic investigation capabilities. This tool empowers
+                      users to analyze audio recordings with professional-grade precision and accuracy.
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -656,11 +979,18 @@ export default function AudioForensicDetector() {
                         <h3 className="font-semibold text-purple-800 mb-2">🎯 Key Features</h3>
                         <ul className="text-sm text-purple-700 space-y-1 text-left">
                           <li>• Real-time audio recording and analysis</li>
+<<<<<<< HEAD
                           <li>• Advanced sound classification system</li>
                           <li>• Interactive 2D and 3D sonar visualization</li>
                           <li>• 3D frequency spectrum analysis</li>
                           <li>• Live audio processing capabilities</li>
                           <li>• Professional PDF report generation</li>
+=======
+                          <li>• Advanced sound event detection</li>
+                          <li>• Interactive sonar-style visualization</li>
+                          <li>• Frequency spectrum analysis</li>
+                          <li>• Live audio processing capabilities</li>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                         </ul>
                       </div>
 
@@ -672,11 +1002,15 @@ export default function AudioForensicDetector() {
                           <li>• Voice pattern analysis</li>
                           <li>• Environmental audio monitoring</li>
                           <li>• Educational audio research</li>
+<<<<<<< HEAD
                           <li>• Intelligent sound identification</li>
+=======
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                         </ul>
                       </div>
                     </div>
 
+<<<<<<< HEAD
                     <div className="p-4 bg-green-50 rounded-lg mt-6">
                       <h3 className="font-semibold text-green-800 mb-2">🚀 Advanced Technology</h3>
                       <p className="text-sm text-green-700">
@@ -690,16 +1024,29 @@ export default function AudioForensicDetector() {
                       Built with cutting-edge web technologies and advanced algorithms, this application provides an
                       intuitive interface for both professional investigators and researchers to perform detailed audio
                       analysis without requiring specialized hardware or software installations.
+=======
+                    <p className="text-base mt-6 text-gray-600">
+                      Built with cutting-edge web technologies, this application provides an intuitive interface for
+                      both professional investigators and researchers to perform detailed audio analysis without
+                      requiring specialized hardware or software installations.
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                     </p>
                   </div>
                 </CardContent>
               </Card>
 
               {/* Development Team */}
+<<<<<<< HEAD
               <Card className="mt-8">
                 <CardHeader>
                   <CardTitle className="text-xl text-center">Development Team</CardTitle>
                   <p className="text-center text-gray-600">Meet the talented developers behind this advanced project</p>
+=======
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-xl text-center">Development Team</CardTitle>
+                  <p className="text-center text-gray-600">Meet the talented developers behind this project</p>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                 </CardHeader>
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -709,7 +1056,11 @@ export default function AudioForensicDetector() {
                         <span className="text-white font-bold text-xl">LC</span>
                       </div>
                       <h3 className="font-bold text-lg text-gray-800 mb-2">Lyndon Domini M. Catan</h3>
+<<<<<<< HEAD
                       <p className="text-sm text-gray-600 mb-4">Lead Developer & System Integration Specialist</p>
+=======
+                      <p className="text-sm text-gray-600 mb-4">Lead Developer & System Architect</p>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                       <a
                         href="https://www.facebook.com/dondon.catan.359/"
                         target="_blank"
@@ -770,8 +1121,12 @@ export default function AudioForensicDetector() {
                     <p className="text-gray-600 text-sm leading-relaxed">
                       We are passionate about creating innovative solutions that bridge the gap between complex audio
                       analysis and user-friendly interfaces. Our goal is to make professional-grade audio forensic tools
+<<<<<<< HEAD
                       accessible to everyone, enhanced with cutting-edge technology for unprecedented accuracy and
                       insight.
+=======
+                      accessible to everyone, from researchers and investigators to students and audio enthusiasts.
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                     </p>
 
                     <div className="mt-4 flex justify-center space-x-4 text-xs text-gray-500">
@@ -779,7 +1134,11 @@ export default function AudioForensicDetector() {
                       <span>•</span>
                       <span>💻 Full-Stack Developers</span>
                       <span>•</span>
+<<<<<<< HEAD
                       <span>🚀 Technology Innovators</span>
+=======
+                      <span>🔬 Audio Technology Enthusiasts</span>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                     </div>
                   </div>
 
@@ -800,12 +1159,15 @@ export default function AudioForensicDetector() {
                         Tailwind CSS
                       </Badge>
                       <Badge variant="outline" className="bg-white">
+<<<<<<< HEAD
                         Advanced Classification
                       </Badge>
                       <Badge variant="outline" className="bg-white">
                         3D Visualization
                       </Badge>
                       <Badge variant="outline" className="bg-white">
+=======
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                         Web Audio API
                       </Badge>
                       <Badge variant="outline" className="bg-white">

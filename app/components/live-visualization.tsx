@@ -42,6 +42,7 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
     if (!audioData || !audioRef.current) return
 
     try {
+<<<<<<< HEAD
       // Check if audio element is already connected to avoid the error
       if (audioRef.current.srcObject || (audioRef.current as any).audioContext) {
         console.log("Audio element already has audio context, skipping initialization")
@@ -79,11 +80,19 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
       }
 
       const analyzer = audioContext.createAnalyser()
+=======
+      // Create audio context for real-time analysis
+      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
+      const source = audioContext.createMediaElementSource(audioRef.current)
+      const analyzer = audioContext.createAnalyser()
+
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       analyzer.fftSize = 2048
       const bufferLength = analyzer.frequencyBinCount
       const dataArray = new Uint8Array(bufferLength)
       const timeDataArray = new Uint8Array(bufferLength)
 
+<<<<<<< HEAD
       try {
         source.connect(analyzer)
         analyzer.connect(audioContext.destination)
@@ -95,6 +104,10 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
         drawMockVisualizations(mockData)
         return
       }
+=======
+      source.connect(analyzer)
+      analyzer.connect(audioContext.destination)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
       // Generate mock comprehensive analysis data
       const mockAnalysisData = generateMockAnalysisData()
@@ -102,6 +115,7 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
 
       // Start real-time visualization loop
       const visualize = () => {
+<<<<<<< HEAD
         if (!audioRef.current || audioRef.current.paused) {
           // Use mock data when not playing
           drawMockVisualizations(mockAnalysisData)
@@ -121,6 +135,16 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
           console.warn("Real-time analysis failed, using mock data:", analysisError)
           drawMockVisualizations(mockAnalysisData)
         }
+=======
+        analyzer.getByteFrequencyData(dataArray)
+        analyzer.getByteTimeDomainData(timeDataArray)
+
+        // Update visualizations with interactive features
+        drawInteractiveSTFT(mockAnalysisData.stft)
+        drawInteractiveFFT(dataArray)
+        drawInteractiveSpectrogram(mockAnalysisData.spectrogram)
+        drawInteractiveEnergyDetection(mockAnalysisData.energy)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
         if (isPlaying) {
           animationRef.current = requestAnimationFrame(visualize)
@@ -130,6 +154,7 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
       if (isPlaying) {
         visualize()
       }
+<<<<<<< HEAD
 
       // Cleanup function
       return () => {
@@ -147,6 +172,11 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
     } catch (error) {
       console.error("Audio analysis initialization failed:", error)
       // Always fallback to mock data visualization
+=======
+    } catch (error) {
+      console.error("Audio analysis initialization failed:", error)
+      // Fallback to mock data visualization
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       const mockData = generateMockAnalysisData()
       setLiveData(mockData)
       drawMockVisualizations(mockData)
@@ -635,6 +665,7 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
     }
   }, [])
 
+<<<<<<< HEAD
   // Cleanup audio context on component unmount
   useEffect(() => {
     return () => {
@@ -656,6 +687,8 @@ export default function LiveVisualization({ audioData }: LiveVisualizationProps)
     }
   }, [])
 
+=======
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
   return (
     <div className="space-y-6">
       <div className="border-t border-gray-200 pt-6">

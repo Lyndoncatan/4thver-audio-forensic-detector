@@ -39,9 +39,13 @@
     "@radix-ui/react-tooltip": "1.1.6",
     "@supabase/ssr": "latest",
     "@supabase/supabase-js": "latest",
+<<<<<<< HEAD
     "@vercel/analytics": "1.3.1",
     "autoprefixer": "^10.4.20",
     "child_process": "latest",
+=======
+    "autoprefixer": "^10.4.20",
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "1.0.4",
@@ -52,9 +56,14 @@
     "jspdf": "latest",
     "jspdf-autotable": "latest",
     "lucide-react": "^0.454.0",
+<<<<<<< HEAD
     "next": "14.2.16",
     "next-themes": "^0.4.4",
     "path": "latest",
+=======
+    "next": "^14.2.31",
+    "next-themes": "^0.4.4",
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     "react": "^18",
     "react-day-picker": "9.8.0",
     "react-dom": "^18",
@@ -75,4 +84,8 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5

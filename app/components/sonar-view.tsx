@@ -1,10 +1,14 @@
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+<<<<<<< HEAD
 import { useEffect, useRef, useCallback, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { RotateCcw } from "lucide-react"
+=======
+import { useEffect, useRef, useCallback } from "react"
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
 interface AudioData {
   blob: Blob
@@ -19,6 +23,7 @@ interface SonarViewProps {
 }
 
 export default function SonarView({ audioData }: SonarViewProps) {
+<<<<<<< HEAD
   const canvas2DRef = useRef<HTMLCanvasElement>(null)
   const canvas3DRef = useRef<HTMLCanvasElement>(null)
   const [rotationX, setRotationX] = useState(0)
@@ -36,16 +41,34 @@ export default function SonarView({ audioData }: SonarViewProps) {
       const animationId = setInterval(() => {
         draw2DSonarView()
         draw3DSonarView()
+=======
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+
+  useEffect(() => {
+    if (audioData?.analysisResults && canvasRef.current) {
+      drawSonarView()
+
+      // Set up animation loop for scanning line
+      const animationId = setInterval(() => {
+        drawSonarView()
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
       }, 100)
 
       return () => {
         clearInterval(animationId)
       }
     }
+<<<<<<< HEAD
   }, [audioData?.analysisResults, rotationX, rotationY, zoom3D])
 
   const draw2DSonarView = useCallback(() => {
     const canvas = canvas2DRef.current
+=======
+  }, [audioData?.analysisResults]) // Only depend on analysisResults
+
+  const drawSonarView = useCallback(() => {
+    const canvas = canvasRef.current
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     if (!canvas || !audioData?.analysisResults) return
 
     const ctx = canvas.getContext("2d")
@@ -55,13 +78,21 @@ export default function SonarView({ audioData }: SonarViewProps) {
     ctx.clearRect(0, 0, width, height)
 
     // Draw background
+<<<<<<< HEAD
     ctx.fillStyle = "#0a0a1a"
+=======
+    ctx.fillStyle = "#1a1a2e"
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     ctx.fillRect(0, 0, width, height)
 
     // Draw concentric circles (sonar rings)
     const centerX = width / 2
     const centerY = height / 2
+<<<<<<< HEAD
     const maxRadius = Math.min(width, height) / 2 - 40
+=======
+    const maxRadius = Math.min(width, height) / 2 - 40 // More space for labels
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
     // Draw range circles with labels
     for (let i = 1; i <= 5; i++) {
@@ -191,6 +222,7 @@ export default function SonarView({ audioData }: SonarViewProps) {
     ctx.fill()
   }, [audioData])
 
+<<<<<<< HEAD
   const draw3DSonarView = useCallback(() => {
     const canvas = canvas3DRef.current
     if (!canvas || !audioData?.analysisResults) return
@@ -489,6 +521,20 @@ export default function SonarView({ audioData }: SonarViewProps) {
       const centerX = canvas2D.width / 2
       const centerY = canvas2D.height / 2
       const maxRadius = Math.min(canvas2D.width, canvas2D.height) / 2 - 40
+=======
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas || !audioData?.analysisResults) return
+
+    const handleCanvasClick = (event: MouseEvent) => {
+      const rect = canvas.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+
+      const centerX = canvas.width / 2
+      const centerY = canvas.height / 2
+      const maxRadius = Math.min(canvas.width, canvas.height) / 2 - 40
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
 
       // Calculate clicked position in polar coordinates
       const dx = x - centerX
@@ -500,6 +546,11 @@ export default function SonarView({ audioData }: SonarViewProps) {
         const time = (angle / (2 * Math.PI)) * audioData.analysisResults.duration
         const frequency = (distance / maxRadius) * 2000
 
+<<<<<<< HEAD
+=======
+        console.log(`Clicked at: ${time.toFixed(2)}s, ${frequency.toFixed(0)}Hz`)
+
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         // Find nearest sound event
         const nearestEvent = audioData.analysisResults.soundEvents.reduce((nearest: any, event: any) => {
           const eventDistance = Math.abs(event.time - time) + Math.abs(event.frequency - frequency) / 100
@@ -508,11 +559,18 @@ export default function SonarView({ audioData }: SonarViewProps) {
         })
 
         if (nearestEvent) {
+<<<<<<< HEAD
           setSelectedEvent(nearestEvent)
+=======
+          alert(
+            `Sound Event: ${nearestEvent.type}\nTime: ${nearestEvent.time}s\nFrequency: ${nearestEvent.frequency}Hz\nAmplitude: ${(nearestEvent.amplitude * 100).toFixed(1)}%`,
+          )
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         }
       }
     }
 
+<<<<<<< HEAD
     const handleCanvas3DClick = (event: MouseEvent) => {
       // 3D click detection would be more complex, for now just clear selection
       setSelectedEvent(null)
@@ -526,14 +584,26 @@ export default function SonarView({ audioData }: SonarViewProps) {
     return () => {
       canvas2D.removeEventListener("click", handleCanvas2DClick)
       canvas3D.removeEventListener("click", handleCanvas3DClick)
+=======
+    canvas.addEventListener("click", handleCanvasClick)
+    canvas.style.cursor = "crosshair"
+
+    return () => {
+      canvas.removeEventListener("click", handleCanvasClick)
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     }
   }, [audioData])
 
   if (!audioData) {
     return (
       <div className="text-center">
+<<<<<<< HEAD
         <h2 className="text-2xl font-bold text-purple-600 mb-4">Advanced Sonar Visualization</h2>
         <p className="text-gray-600 mb-8">Upload or record audio to see dual sonar visualization</p>
+=======
+        <h2 className="text-2xl font-bold text-purple-600 mb-4">Sonar Visualization</h2>
+        <p className="text-gray-600 mb-8">Upload or record audio to see sonar visualization</p>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         <div className="bg-gray-100 rounded-lg p-8">
           <p className="text-gray-500">No audio data available for visualization</p>
         </div>
@@ -544,8 +614,13 @@ export default function SonarView({ audioData }: SonarViewProps) {
   if (!audioData.analysisResults) {
     return (
       <div className="text-center">
+<<<<<<< HEAD
         <h2 className="text-2xl font-bold text-purple-600 mb-4">Advanced Sonar Visualization</h2>
         <p className="text-gray-600 mb-8">Analyze audio first to see dual sonar visualization</p>
+=======
+        <h2 className="text-2xl font-bold text-purple-600 mb-4">Sonar Visualization</h2>
+        <p className="text-gray-600 mb-8">Analyze audio first to see sonar visualization</p>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
         <div className="bg-gray-100 rounded-lg p-8">
           <p className="text-gray-500">Analysis required for visualization</p>
         </div>
@@ -555,6 +630,7 @@ export default function SonarView({ audioData }: SonarViewProps) {
 
   return (
     <div>
+<<<<<<< HEAD
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-purple-600">Advanced Sonar Visualization</h2>
 
@@ -610,11 +686,25 @@ export default function SonarView({ audioData }: SonarViewProps) {
                 height={viewMode === "full2d" ? 600 : 400}
                 className="w-full border rounded-lg bg-gray-900"
               />
+=======
+      <h2 className="text-2xl font-bold text-purple-600 mb-6 text-center">Sonar Visualization</h2>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Sonar Display */}
+        <div className="lg:col-span-2">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Audio Sonar Display</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <canvas ref={canvasRef} width={600} height={400} className="w-full border rounded-lg bg-gray-900" />
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
               <p className="text-sm text-gray-600 mt-2 text-center">
                 Sound events plotted by time (angle) and frequency (distance from center)
               </p>
             </CardContent>
           </Card>
+<<<<<<< HEAD
         )}
 
         {/* 3D Sonar Display */}
@@ -640,10 +730,34 @@ export default function SonarView({ audioData }: SonarViewProps) {
                 <div className="text-xs text-gray-500">
                   Zoom: {zoom3D.toFixed(1)}x | Rotation: {((rotationX * 180) / Math.PI).toFixed(0)}°,{" "}
                   {((rotationY * 180) / Math.PI).toFixed(0)}°
+=======
+        </div>
+
+        {/* Legend and Info */}
+        <div className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Legend</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-green-500 rounded-full opacity-30"></div>
+                  <span className="text-sm">Sonar Grid</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-yellow-500 rounded-full"></div>
+                  <span className="text-sm">Sound Events</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-green-500 rounded-full"></div>
+                  <span className="text-sm">Scanning Line</span>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
                 </div>
               </div>
             </CardContent>
           </Card>
+<<<<<<< HEAD
         )}
       </div>
 
@@ -809,6 +923,50 @@ export default function SonarView({ audioData }: SonarViewProps) {
           </div>
         </CardContent>
       </Card>
+=======
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Detection Stats</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                <p>
+                  <strong>Total Events:</strong> {audioData.analysisResults.detectedSounds}
+                </p>
+                <p>
+                  <strong>Max Range:</strong> 2000 Hz
+                </p>
+                <p>
+                  <strong>Scan Duration:</strong> {audioData.analysisResults.duration}s
+                </p>
+                <p>
+                  <strong>Resolution:</strong> High
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-lg">Sound Types</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-2">
+                {Array.from(new Set(audioData.analysisResults.soundEvents.map((e: any) => e.type))).map((type: any) => (
+                  <div key={type} className="flex justify-between">
+                    <span>{type}</span>
+                    <span className="text-sm text-gray-600">
+                      {audioData.analysisResults.soundEvents.filter((e: any) => e.type === type).length}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+>>>>>>> 754d16a453ea9f48bb6124628bfeebbe0aa23ed5
     </div>
   )
 }
